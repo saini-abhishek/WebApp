@@ -26,7 +26,7 @@ const useStyles = makeStyles(() => ({
         
     },
     dashboard: {
-        border: '1px solid',
+        // border: '1px solid',
         width: '90%',
         height: 'inherit',
     },
