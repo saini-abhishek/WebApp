@@ -13,20 +13,17 @@ import NavBar from './Module/Dashboard/NavBar';
 
 const useStyles = makeStyles(() => ({
     appWrapper: {
-        height: '100%',
         width: '100%',
         alignItems: 'center',
         display: 'flex',
     },
     mainLayout: {
-        height: '90%',
         width: '100%',
         display: 'flex',
         justifyContent: 'center',
         
     },
     dashboard: {
-        // border: '1px solid',
         width: '90%',
         height: 'inherit',
     },

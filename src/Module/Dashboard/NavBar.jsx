@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useRef, useState, useEffect} from 'react';
+import _ from 'lodash';
 import { makeStyles } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -7,13 +8,17 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import { Route, NavLink , BrowserRouter as Router } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 
 
 const useStyles = makeStyles(() => ({
     navbar: {
         display: 'flex',
         width: '100%',
-        border: '1px solid'
+        border: '1px solid',
+        marginTop: '50px',
     },
     navItemBlock: {
         display: 'flex',
@@ -58,6 +63,7 @@ const useStyles = makeStyles(() => ({
 
 const NavBar = () => {
     const classes = useStyles();
+    const options =  ["By Business", "By Company", "By Company Dictionary", "By Date"];
     return (
         <div className={classes.navbar}>
             <div className={classes.navItemBlock}>
@@ -74,10 +80,7 @@ const NavBar = () => {
                         value="All Virtual Archieve"
                         onChange={() => {}}
                     >
-                    <option aria-label="None" value="" />
-                    <option value="All Virtual Archieve">All Virtual Archieve</option>
-                    <option value="All Virtual Archieve">All Virtual Archieve</option>
-                    <option value="All Virtual Archieve">All Virtual Archieve</option>
+                        {_.map(options, option => (<option value={option}>{option}</option>))}
                     </Select>
                 </FormControl>
             </div>

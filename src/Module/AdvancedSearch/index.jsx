@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import DateFnsUtils from '@date-io/date-fns';
 import { DatePicker, MuiPickersUtilsProvider  } from "@material-ui/pickers";
+import moment from 'moment';
+import MomentUtils from "@date-io/moment";
 
 
 const useStyles = makeStyles((theme) => ({
     root: {
+        marginTop: '20px',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -46,6 +48,7 @@ const useStyles = makeStyles((theme) => ({
     },
     input_block: {
         marginTop: '10px',
+        display: 'flex',
     },
     action_block: {
         marginTop: '20px',
@@ -62,10 +65,18 @@ const useStyles = makeStyles((theme) => ({
     businessAndCompany: {
         width: '450px',
     },
+    date_wrapper: {
+        display: 'flex',
+        width: '500px',
+        justifyContent: 'space-between',
+    },
 }));
 
 const AdvancedSearch = () => {
     const classes = useStyles();
+    const [fromDate, setFromDate] = useState(new Date());
+    const [toDate, setToDate] = useState(new Date());
+
     return (
         <div className={classes.root}>
             <Paper variant="outlined" className={classes.paper} >
@@ -81,7 +92,11 @@ const AdvancedSearch = () => {
                                     All of these words:
                                 </Typography>
                             </div>
-                            <TextField variant="outlined" className={classes.inputField}></TextField>
+                            <TextField
+                                variant="outlined"
+                                className={classes.inputField}
+                                placeholder="All of these words"
+                            />
                         </div>
                         <div className={classes.input_block}>
                             <div className={classes.label}>
@@ -89,7 +104,11 @@ const AdvancedSearch = () => {
                                     The exact phrase:
                                 </Typography>
                             </div>
-                            <TextField variant="outlined" className={classes.inputField}></TextField>
+                            <TextField
+                                variant="outlined"
+                                className={classes.inputField}
+                                placeholder="The exact phrase"
+                            />
                         </div>
                         <div className={classes.input_block}>
                             <div className={classes.label}>
@@ -97,7 +116,11 @@ const AdvancedSearch = () => {
                                     Any of these words:
                                 </Typography>
                             </div>
-                            <TextField variant="outlined" className={classes.inputField}></TextField>
+                            <TextField
+                                variant="outlined"
+                                className={classes.inputField}
+                                placeholder="Any of these words"
+                                />
                         </div>
                         <div className={classes.input_block}>
                             <div className={classes.label}>
@@ -105,7 +128,11 @@ const AdvancedSearch = () => {
                                     Business and Company:
                                 </Typography>
                             </div>
-                            <TextField variant="outlined" className={clsx(classes.inputField, classes.businessAndCompany)} />
+                            <TextField
+                                variant="outlined"
+                                className={clsx(classes.inputField, classes.businessAndCompany)}
+                                placeholder="Business and Company"
+                                />
                         </div>
                         <div className={classes.input_block}>
                             <div className={classes.label}>
@@ -113,7 +140,39 @@ const AdvancedSearch = () => {
                                     Category and Type:
                                 </Typography>
                             </div>
-                            <TextField variant="outlined" className={clsx(classes.inputField, classes.categoryandType)} />
+                            <TextField 
+                                variant="outlined"
+                                placeholder="Business and Company"
+                                className={clsx(classes.inputField, classes.categoryandType)}
+                            />
+                        </div>
+                        <div className={classes.input_block}>
+                            <div className={classes.label}>
+                                <Typography variant="body">
+                                    Between Dates:
+                                </Typography>
+                            </div>
+                            <div className={classes.date_wrapper}>
+                                <MuiPickersUtilsProvider libInstance={moment} utils={MomentUtils}>
+                                    <DatePicker
+                                        value={fromDate}
+                                        inputVariant="outlined"
+                                        format="DD/MM/yy"
+                                        onChange={date => setFromDate(date)}
+                                        className={classes.inputField}
+                                    />
+                                </MuiPickersUtilsProvider>
+                                <Typography variant="body">to</Typography>
+                                <MuiPickersUtilsProvider libInstance={moment} utils={MomentUtils}>
+                                    <DatePicker
+                                        value={toDate}
+                                        inputVariant="outlined"
+                                        format="DD/MM/yy"
+                                        onChange={date => setToDate(date)}
+                                        className={classes.inputField}
+                                    />
+                                </MuiPickersUtilsProvider>
+                            </div>
                         </div>
                         <div className={classes.action_block}>
                             <Button
@@ -130,18 +189,8 @@ const AdvancedSearch = () => {
                                 Search
                             </Button>
                         </div>
-                        {/* <div>
-                            <Typography variant="body">
-                                Between Dates:
-                            </Typography>
-                            <TextField
-                                id="date"
-                                label="from"
-                                type="date"
-                                variant="outlined"
-                                placeholder={false}
-                            />
-                        </div> */}
+                        <div>
+                        </div>
                 </div>
             </Paper>
         </div>
