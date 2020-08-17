@@ -39,6 +39,13 @@ const Browse = () => {
         {fromYear: 2000, toYear: 2010},
         {fromYear: 2010, toYear: 2020},
     ];
+    
+    const byKey = [
+        {fromKey: 'A', toKey: 'F'},
+        {fromKey: 'F', toKey: 'L'},
+        {fromKey: 'L', toKey: 'X'},
+        {fromKey: 'X', toKey: 'Z'},
+    ];
 
     const dispatch = useDispatch();
     const {archieves} = useSelector((store) => ({
@@ -50,8 +57,11 @@ const Browse = () => {
     };
 
     const ArchieveByYear = (fromYear, toYear) => {
-        debugger;
         fetchArchieveByYear(fromYear, toYear, dispatch);
+    };
+
+    const ArchieveByKeys = (fromKey, toKey) => {
+        fetchArchieveByCompanyDictonary(fromKey, toKey, dispatch);
     };
 
 
@@ -154,11 +164,46 @@ const Browse = () => {
                     >
                     <Typography className={classes.heading}>Company Dictonary</Typography>
                     </AccordionSummary>
-                    <AccordionDetails>
-                    <Typography>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                        sit amet blandit leo lobortis eget.
-                    </Typography>
+                    <AccordionDetails className={classes.categories_acc_details}>
+                    {_.map(byKey, (key) => (
+                            <Fragment>
+                            <div>
+                                <Accordion
+                                    onChange={(event, expanded) => expanded && ArchieveByKeys(key.fromKey, key.toKey)}
+                                >
+                                    <AccordionSummary
+                                        expandIcon={<ExpandMoreIcon />}
+                                        aria-controls="panel1a-content"
+                                        id="panel1a-header"
+                                        >
+                                        <Typography className={classes.heading}>{`${key.fromKey} - ${key.toKey}`}</Typography>
+                                    </AccordionSummary>
+                                    <AccordionDetails className={classes.categories_acc_details}>
+                                    {_.map(archieves, (archieve) => (
+                                        <Fragment>
+                                        <div>
+                                            <Accordion>
+                                                <AccordionSummary
+                                                    expandIcon={<ExpandMoreIcon />}
+                                                    aria-controls="panel1a-content"
+                                                    id="panel1a-header"
+                                                    >
+                                                    <Typography className={classes.heading}>{`${archieve.data} (${archieve.year})`}</Typography>
+                                                </AccordionSummary>
+                                                <AccordionDetails>
+                                                    {`${archieve.data} - ${archieve.year} - ${archieve.category}`}
+                                                </AccordionDetails>
+                                            </Accordion>
+                                        </div>
+                                        <br/>
+                                        </Fragment>
+                                    ))}
+                                    </AccordionDetails>
+                                </Accordion>
+                            </div>
+                            <br/>
+                            </Fragment>
+                        ))}
                     </AccordionDetails>
                 </Accordion>
                 <br/>

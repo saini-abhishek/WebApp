@@ -11,5 +11,5 @@ export const fetchArchieveByYear = (fromYear, toYear, dispatch) => {
     return dispatch({type: year, payload: { fromYear, toYear }});
 }
 export const fetchArchieveByCompanyDictonary = (fromKey, toKey, dispatch) => {
-    return dispatch({type: category, payload: { fromKey, toKey }});
+    return dispatch({type: companyDictonary, payload: { fromKey, toKey }});
 }

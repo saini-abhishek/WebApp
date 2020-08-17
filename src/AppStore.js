@@ -11,10 +11,10 @@ const rootReducer = (state = initialState, action) => {
         case(category):
             return _.filter(initialState, (item) => item.category === action.payload.type); 
         case(year):
-            debugger;
             return _.filter(initialState, (item) => action.payload.fromYear < item.year && item.year < action.payload.toYear); 
         case(companyDictonary):
-            return _.filter(initialState, (item) => item);     
+            debugger;
+            return _.filter(initialState, (item) => action.payload.fromKey < item.data[0] && item.data[0] < action.payload.toKey); 
         default:
             return initialState;
     }
