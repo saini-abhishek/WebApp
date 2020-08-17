@@ -6,6 +6,9 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { fetchArchieveByCategory, fetchArchieveByYear, fetchArchieveByCompanyDictonary } from '../../Action';
 
 const useStyles = makeStyles((theme) => ({
     browse_block: {
@@ -29,7 +32,29 @@ const useStyles = makeStyles((theme) => ({
 
 const Browse = () => {
     const classes = useStyles();
-    const categories = ['agents', 'corporate'];
+    const categories = ['Agent', 'corporate'];
+    const byDate = [
+        {fromYear: 1980, toYear: 1990},
+        {fromYear: 1990, toYear: 2000},
+        {fromYear: 2000, toYear: 2010},
+        {fromYear: 2010, toYear: 2020},
+    ];
+
+    const dispatch = useDispatch();
+    const {archieves} = useSelector((store) => ({
+        archieves : store
+    }));
+
+    const ArchieveByCategory = (type) => {
+        fetchArchieveByCategory(type, dispatch);
+    };
+
+    const ArchieveByYear = (fromYear, toYear) => {
+        debugger;
+        fetchArchieveByYear(fromYear, toYear, dispatch);
+    };
+
+
     return (
         <div className={classes.browse_block}>
             <Typography variant="h6" color="secondary">Browse</Typography>
@@ -39,17 +64,33 @@ const Browse = () => {
             <div className={classes.inner_block}>
                 <Accordion>
                     <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
                     >
-                    <Typography className={classes.heading}>Business</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                    <Typography>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
+                        <Typography className={classes.heading}>Business</Typography>
+                    </AccordionSummary >
+                    <AccordionDetails className={classes.categories_acc_details}>
+                        {_.map(archieves, (archieve) => (
+                            <Fragment>
+                            <div>
+                                <Accordion>
+                                    <AccordionSummary
+                                        expandIcon={<ExpandMoreIcon />}
+                                        aria-controls="panel1a-content"
+                                        id="panel1a-header"
+                                        >
+                                        <Typography className={classes.heading}>{archieve.data}</Typography>
+                                    </AccordionSummary>
+                                    <AccordionDetails>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
                         sit amet blandit leo lobortis eget.
-                    </Typography>
+                                    </AccordionDetails>
+                                </Accordion>
+                            </div>
+                            <br/>
+                            </Fragment>
+                        ))}
                     </AccordionDetails>
                 </Accordion>
                 <br/>
@@ -65,7 +106,9 @@ const Browse = () => {
                         {_.map(categories, (category) => (
                             <Fragment>
                             <div>
-                                <Accordion>
+                                <Accordion
+                                    onChange={(event, expanded) => expanded && ArchieveByCategory(category)}
+                                >
                                     <AccordionSummary
                                         expandIcon={<ExpandMoreIcon />}
                                         aria-controls="panel1a-content"
@@ -73,9 +116,26 @@ const Browse = () => {
                                         >
                                         <Typography className={classes.heading}>{category}</Typography>
                                     </AccordionSummary>
-                                    <AccordionDetails>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                        sit amet blandit leo lobortis eget.
+                                    <AccordionDetails className={classes.categories_acc_details}>
+                                    {_.map(archieves, (archieve) => (
+                                        <Fragment>
+                                        <div>
+                                            <Accordion>
+                                                <AccordionSummary
+                                                    expandIcon={<ExpandMoreIcon />}
+                                                    aria-controls="panel1a-content"
+                                                    id="panel1a-header"
+                                                    >
+                                                    <Typography className={classes.heading}>{`${archieve.data} : ${archieve.category}`}</Typography>
+                                                </AccordionSummary>
+                                                <AccordionDetails>
+                                                
+                                                </AccordionDetails>
+                                            </Accordion>
+                                        </div>
+                                        <br/>
+                                        </Fragment>
+                                    ))}
                                     </AccordionDetails>
                                 </Accordion>
                             </div>
@@ -111,11 +171,46 @@ const Browse = () => {
                     >
                     <Typography className={classes.heading}>Company Dictonary (By Date)</Typography>
                     </AccordionSummary>
-                    <AccordionDetails>
-                    <Typography>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                        sit amet blandit leo lobortis eget.
-                    </Typography>
+                    <AccordionDetails className={classes.categories_acc_details}>
+                    {_.map(byDate, (date) => (
+                            <Fragment>
+                            <div>
+                                <Accordion
+                                    onChange={(event, expanded) => expanded && ArchieveByYear(date.fromYear, date.toYear)}
+                                >
+                                    <AccordionSummary
+                                        expandIcon={<ExpandMoreIcon />}
+                                        aria-controls="panel1a-content"
+                                        id="panel1a-header"
+                                        >
+                                        <Typography className={classes.heading}>{`${date.fromYear} - ${date.toYear}`}</Typography>
+                                    </AccordionSummary>
+                                    <AccordionDetails className={classes.categories_acc_details}>
+                                    {_.map(archieves, (archieve) => (
+                                        <Fragment>
+                                        <div>
+                                            <Accordion>
+                                                <AccordionSummary
+                                                    expandIcon={<ExpandMoreIcon />}
+                                                    aria-controls="panel1a-content"
+                                                    id="panel1a-header"
+                                                    >
+                                                    <Typography className={classes.heading}>{`${archieve.data} (${archieve.year})`}</Typography>
+                                                </AccordionSummary>
+                                                <AccordionDetails>
+                                                    {`${archieve.data} - ${archieve.year} - ${archieve.category}`}
+                                                </AccordionDetails>
+                                            </Accordion>
+                                        </div>
+                                        <br/>
+                                        </Fragment>
+                                    ))}
+                                    </AccordionDetails>
+                                </Accordion>
+                            </div>
+                            <br/>
+                            </Fragment>
+                        ))}
                     </AccordionDetails>
                 </Accordion>
             </div>
