@@ -7,7 +7,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import NativeSelect from '@material-ui/core/NativeSelect';
-import { Route, NavLink , BrowserRouter as Router } from 'react-router-dom';
+import { Route, NavLink , BrowserRouter as Router, useHistory } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -64,6 +64,30 @@ const useStyles = makeStyles(() => ({
 const NavBar = () => {
     const classes = useStyles();
     const options =  ["By Business", "By Company", "By Company Dictionary", "By Date"];
+    const [searchValue, setSearchValue] = useState('');
+    const searchFieldRef = useRef(null);
+
+    const history = useHistory();
+
+    const onSearchValueChange = (event) => {
+        setSearchValue(event.currentTarget.value);
+    };
+
+    useEffect(() => {
+        if(searchFieldRef.current){
+            searchFieldRef.current.addEventListener('keyup', event => {
+                if(event.keyCode === 13){
+                    history.push(`/search-results/${searchValue}`);                    
+                }
+            });
+        }
+        return () => {
+            if(searchFieldRef.current){
+                searchFieldRef.current.removeEventListener('keyup', ()=>{});
+            }
+        }
+    }, [searchFieldRef, searchValue]);
+    
     return (
         <div className={classes.navbar}>
             <div className={classes.navItemBlock}>
@@ -89,6 +113,9 @@ const NavBar = () => {
                     variant="outlined"
                     className={classes.search}
                     placeholder="Search"
+                    ref={searchFieldRef}
+                    value={searchValue}
+                    onChange={onSearchValueChange}
                 />
             </div>
         </div>
